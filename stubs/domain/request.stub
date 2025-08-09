@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Requests;
+
+use App\Http\Resources\ResponseResource;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+
+class {{name}}StoreRequest extends FormRequest
+{
+    public function authorize() { return true; }
+
+    public function rules()
+    {
+        return [
+            // definisikan validasi di sini
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'name.required' => 'Nama {{name}} wajib diisi.',
+            'name.unique' => 'Nama {{name}} sudah terdaftar.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            ResponseResource::error(
+                422,
+                false,
+                'Validation error',
+                $validator->errors()
+            )
+        );
+    }
+}

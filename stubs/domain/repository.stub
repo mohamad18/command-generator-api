@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Domain\{{name}}\Repositories;
+
+use App\Domain\{{name}}\Models\{{name}};
+use App\Domain\{{name}}\DataTransferObjects\{{name}}Data;
+
+class {{name}}Repository
+{
+    public function getAll()
+    {
+        return {{name}}::all();
+    }
+
+    public function find(int $id)
+    {
+        return {{name}}::findOrFail($id);
+    }
+
+    public function create({{name}}Data $data)
+    {
+        return {{name}}::create((array) $data);
+    }
+
+    public function update(int $id, {{name}}Data $data)
+    {
+        $model = {{name}}::findOrFail($id);
+        $model->update((array) $data);
+        return $model;
+    }
+
+    public function delete(int $id)
+    {
+        return {{name}}::destroy($id);
+    }
+}

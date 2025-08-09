@@ -1,0 +1,208 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{name}}StoreRequest;
+use App\Domain\{{name}}\Services\{{name}}Service;
+use App\Http\Resources\ResponseResource;
+use Illuminate\Database\QueryException;
+
+class {{name}}Controller extends Controller
+{
+    public function __construct(private {{name}}Service $service) {}
+
+    /**
+     * index
+     *
+     * @return void
+     */
+    public function index()
+    {
+        $result = json_decode($this->service->getAll());
+
+        // validate the result
+        if (is_null($result) || !is_array($result)) {
+            return new ResponseResource(404, false, 'No {{name}} found', []);
+        }
+
+        // check if the result is empty
+        if (empty($result)) {
+            return new ResponseResource(404, false, 'No {{name}} found', []);
+        }
+
+        return new ResponseResource(200, true, '{{name}} retrieved successfully', $result);
+    }
+
+    /**
+     * store
+     *
+     * @param mixed $request
+     * @return void
+     */
+    public function store({{name}}StoreRequest $request)
+    {
+
+        try {
+            $created = $this->service->create($request->validated());
+
+            // check if the creation was successful
+            if (!$created) {
+                return new ResponseResource(500, false, '{{name}} creation failed', []);
+            }
+
+            return new ResponseResource(201, true, '{{name}} created successfully', $created);
+        } catch (QueryException $e) {
+            return new ResponseResource(500, false, 'Database error: ' . $e->getMessage(), []);
+        } catch (\Throwable $e) {
+            return new ResponseResource(500, false, 'Unexpected error: ' . $e->getMessage(), []);
+        }
+    }
+
+    /**
+     * show
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function show($id)
+    {
+        try {
+            // validation id
+            if (!ctype_digit((string) $id) || (int) $id <= 0) {
+                return new ResponseResource(
+                    422,
+                    false,
+                    'Invalid {{name}} ID',
+                    []
+                );
+            }
+
+            // get data from service
+            $result = $this->service->getById((int) $id);
+
+            // check if data found
+            if (!$result) {
+                return new ResponseResource(
+                    404,
+                    false,
+                    '{{name}} not found',
+                    []
+                );
+            }
+
+            // Return data
+            return new ResponseResource(
+                200,
+                true,
+                '{{name}} retrieved successfully',
+                $result
+            );
+        } catch (QueryException $e) {
+            return new ResponseResource(
+                500,
+                false,
+                'Database error: ' . $e->getMessage(),
+                []
+            );
+        } catch (\Throwable $e) {
+            return new ResponseResource(
+                500,
+                false,
+                'Unexpected error: ' . $e->getMessage(),
+                []
+            );
+        }
+    }
+
+    /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return void
+     */
+    public function update({{name}}StoreRequest $request, $id)
+    {
+        try {
+            // validation id
+            if (!ctype_digit((string) $id) || (int) $id <= 0) {
+                return new ResponseResource(
+                    422,
+                    false,
+                    'Invalid {{name}} ID',
+                    []
+                );
+            }
+
+            $result = $this->service->update($id, $request->validated());
+
+            // check if the update was successful
+            if (!$result) {
+                return new ResponseResource(500, false, '{{name}} update failed', []);
+            }
+
+            return new ResponseResource(200, true, '{{name}} updated successfully', $result);
+        } catch (QueryException $e) {
+            return new ResponseResource(500, false, 'Database error: ' . $e->getMessage(), []);
+        } catch (\Throwable $e) {
+            return new ResponseResource(500, false, 'Unexpected error: ' . $e->getMessage(), []);
+        }
+    }
+
+    /**
+     * destroy
+     *
+     * @param  mixed $id
+     * @return void
+     */
+    public function destroy($id)
+    {
+        try {
+            // validation id
+            if (!ctype_digit((string) $id) || (int) $id <= 0) {
+                return new ResponseResource(
+                    422,
+                    false,
+                    'Invalid {{name}} ID',
+                    []
+                );
+            }
+
+            // get data from service
+            $result = $this->service->delete((int) $id);
+
+            // check if data found
+            if (!$result) {
+                return new ResponseResource(
+                    404,
+                    false,
+                    '{{name}} not found',
+                    []
+                );
+            }
+
+            // Return data
+            return new ResponseResource(
+                200,
+                true,
+                '{{name}} deleted successfully',
+                $result
+            );
+        } catch (QueryException $e) {
+            return new ResponseResource(
+                500,
+                false,
+                'Database error: ' . $e->getMessage(),
+                []
+            );
+        } catch (\Throwable $e) {
+            return new ResponseResource(
+                500,
+                false,
+                'Unexpected error: ' . $e->getMessage(),
+                []
+            );
+        }
+    }
+}

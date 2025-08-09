@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Domain\{{name}}\DataTransferObjects;
+
+class {{name}}Data
+{
+    public function __construct(
+        // definisikan property di sini, misal:
+        public string $name = '',
+        public string $description = ''
+    ) {}
+}

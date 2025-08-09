@@ -1,0 +1,12 @@
+<?php
+
+namespace App\Domain\{{name}}\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class {{name}} extends Model
+{
+    protected $fillable = [
+        // tambahkan field di sini
+    ];
+}
