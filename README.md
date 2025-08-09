@@ -1,4 +1,4 @@
-## Standarisasi: Cara Generate Command Data Transfer Object (DTO) Domainn
+## Standarisasi: Cara Generate Command Data Transfer Object (DTO) Domain
 1. Buat folder stubs/domain di dalam folder project
 2. Create file controller.stub dto.stub model.stub repository.stub request.stub service.stub response.stub routes.stub
 3. Create file command make domain:
